@@ -1,0 +1,21 @@
+{
+  "name": "locale-textdomain",
+  "version": "1.0.0",
+  "description": "Gettext runtime for JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git.cantanea.com/cantanea/locale-textdomain.git"
+  },
+  "keywords": [
+    "i18n",
+    "l10n",
+    "gettext",
+    "locale"
+  ],
+  "author": "Guido Flohr <guido.flohr@cantanea.com> (http://www.guido.flohr.net/)",
+  "license": "MIT"
+}
