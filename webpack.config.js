@@ -1,3 +1,5 @@
+'use strict';
+
 /* global __dirname, require, module*/
 
 const webpack = require('webpack');
@@ -6,14 +8,15 @@ const path = require('path');
 const env = require('yargs').argv.env; // use --env with webpack 2
 
 let libraryName = 'LocaleTextdomain';
+let fileName = 'locale-textdomain';
 
 let plugins = [], outputFile;
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + '.min.js';
+  outputFile = fileName + '.min.js';
 } else {
-  outputFile = libraryName + '.js';
+  outputFile = fileName + '.js';
 }
 
 const config = {

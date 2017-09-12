@@ -1,3 +1,5 @@
+'use strict';
+
 var LT = require('../lib/locale-textdomain');
 var chai = require('chai');
 
