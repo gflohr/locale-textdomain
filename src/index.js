@@ -6,11 +6,11 @@ var domain_bindings = {};
 function LocaleTextdomain(d) {
     var domain;
 
-    this.domain = d !== undefined ? d : 'messages';
+    this.domain = d !== undefined && d !== '' ? d : 'messages';
 };
 
 LocaleTextdomain.prototype.textdomain = function (d) {
-    if (d !== undefined) this.domain = d;
+    if (d !== undefined && d.length !== 0) this.domain = d;
 
     return this.domain;
 };
@@ -27,6 +27,10 @@ LocaleTextdomain.prototype.bindtextdomain = function(domain, dir) {
         return domain_bindings[domain];
 
     return default_dir;
+};
+
+LocaleTextdomain.prototype._ = function(msgid) {
+    return msgid;
 };
 
 module.exports = {
