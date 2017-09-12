@@ -17,10 +17,10 @@ function LocaleTextdomain(domain) {
     this._locale = 'C';
 }
 
-LocaleTextdomain.prototype.setLocale = function(locale) {
-    if (!empty(locale)) this._locale = locale; 
+LocaleTextdomain.prototype.setlocale = function(locale) {
+    if (!empty(locale)) this._locale = locale;
 
-    return this._locale; 
+    return this._locale;
 };
 
 LocaleTextdomain.prototype.textdomain = function (domain) {
