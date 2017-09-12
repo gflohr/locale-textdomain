@@ -10,15 +10,23 @@ function empty(what) {
 }
 
 function LocaleTextdomain(domain) {
-    if (empty(domain)) domain = 'messages';
+    if (empty(domain))
+        domain = 'messages';
 
-    this._domain = domain;
+    this._textdomain = domain;
+    this._locale = 'C';
 }
 
-LocaleTextdomain.prototype.textdomain = function (domain) {
-    if (!empty(domain)) this._domain = domain;
+LocaleTextdomain.prototype.setLocale = function(locale) {
+    if (!empty(locale)) this._locale = locale; 
 
-    return this._domain;
+    return this._locale; 
+};
+
+LocaleTextdomain.prototype.textdomain = function (domain) {
+    if (!empty(domain)) this._textdomain = domain;
+
+    return this._textdomain;
 };
 
 LocaleTextdomain.prototype.bindtextdomain = function(domain, dir) {
