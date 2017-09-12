@@ -33,6 +33,13 @@ LocaleTextdomain.prototype._ = function(msgid) {
     return msgid;
 };
 
+LocaleTextdomain.prototype._n = function(msgid, msgid_plural, count) {
+    if (count === 1)
+        return msgid;
+
+    return msgid_plural;
+};
+
 module.exports = {
     use: function (domain) {
         return new LocaleTextdomain(domain);
