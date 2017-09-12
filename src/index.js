@@ -3,23 +3,29 @@
 const default_dir = 'assets';
 var domain_bindings = {};
 
-function LocaleTextdomain(d) {
-    var domain;
+function empty(what) {
+    if (what === undefined || what === '') return true;
 
-    this.domain = d !== undefined && d !== '' ? d : 'messages';
-};
+    return false;
+}
 
-LocaleTextdomain.prototype.textdomain = function (d) {
-    if (d !== undefined && d.length !== 0) this.domain = d;
+function LocaleTextdomain(domain) {
+    if (empty(domain)) domain = 'messages';
 
-    return this.domain;
+    this._domain = domain;
+}
+
+LocaleTextdomain.prototype.textdomain = function (domain) {
+    if (!empty(domain)) this._domain = domain;
+
+    return this._domain;
 };
 
 LocaleTextdomain.prototype.bindtextdomain = function(domain, dir) {
-    if (domain === undefined || domain === '')
+    if (empty(domain))
         throw(new Error('undefined or empty textdomain in call to bindtextdomain()'));
 
-    if (dir !== undefined && dir.length !== 0) {
+    if (!empty(dir)) {
         domain_bindings[domain] = dir;
     }
 
@@ -40,8 +46,6 @@ LocaleTextdomain.prototype._n = function(msgid, msgid_plural, count) {
     return msgid_plural;
 };
 
-module.exports = {
-    use: function (domain) {
-        return new LocaleTextdomain(domain);
-    }
+module.exports = function (domain) {
+    return new LocaleTextdomain(domain);
 };
