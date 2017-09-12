@@ -1,23 +1,23 @@
 'use strict';
 
 function LocaleTextdomain(d) {
-  var domain;
+    var domain;
 
-  domain = d !== undefined ? d : 'messages';
+    domain = d !== undefined ? d : 'messages';
 
-  this.textdomain = function (d) {
-    if (d !== undefined) domain = d;
+    this.textdomain = function (d) {
+        if (d !== undefined) domain = d;
 
-    return domain;
-  };
+        return domain;
+    };
 };
 
 LocaleTextdomain.prototype.gettext = function (msgid) {
-  return msgid;
+    return msgid;
 };
 
 module.exports = {
-  use: function (domain) {
-    return new LocaleTextdomain(domain);
-  }
+    use: function (domain) {
+        return new LocaleTextdomain(domain);
+    }
 };
