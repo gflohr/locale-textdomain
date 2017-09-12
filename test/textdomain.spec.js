@@ -11,4 +11,16 @@ describe('When requiring the library', () => {
             expect(lt.use().textdomain()).to.be.equal('messages');
         });
     });
+    describe('and a textdomain was specified', () => {
+        var t = lt.use('old');
+        it('it should use it', () => {
+            expect(t.textdomain()).to.be.equal('old');
+        });
+        it('it should allow to override it and return it', () => {
+            expect(t.textdomain('new')).to.be.equal('new');
+        });
+        it('it should remember it', () => {
+            expect(t.textdomain()).to.be.equal('new');
+        });
+    });
 });

@@ -3,17 +3,13 @@
 function LocaleTextdomain(d) {
     var domain;
 
-    domain = d !== undefined ? d : 'messages';
-
-    this.textdomain = function (d) {
-        if (d !== undefined) domain = d;
-
-        return domain;
-    };
+    this.domain = d !== undefined ? d : 'messages';
 };
 
-LocaleTextdomain.prototype.gettext = function (msgid) {
-    return msgid;
+LocaleTextdomain.prototype.textdomain = function (d) {
+    if (d !== undefined) this.domain = d;
+
+    return this.domain;
 };
 
 module.exports = {
