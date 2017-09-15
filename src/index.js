@@ -198,12 +198,13 @@ LocaleTextdomain.prototype.setlocale = function(locale) {
          * mechanism from glibc, in the browser we read the language
          * preferences instead.
          */
-        if (typeof window !== undefined
-            && typeof navigator !== undefined
+        if (typeof window !== 'undefined'
+            && typeof navigator !== 'undefined'
             && navigator.languages instanceof Array) {
             throw(new Error("Not yet implemented"));
-        } else if (typeof process !== undefined
-                   && typeof process.env !== undefined) {
+        // } else if (typeof process !== 'undefined'
+        //           && process.env !== undefined) {
+        } else {
             locales = setLocaleFromNativeEnvironment();
         }
     } else if (locale !== undefined) {
@@ -252,7 +253,10 @@ LocaleTextdomain.prototype._n = function(msgid, msgid_plural, count) {
  * systems it has to be heavily reworked.
  */
 function setLocaleFromNativeEnvironment() {
-    var language = process.env.LANGUAGE;
+    //var language = process.env.LANGUAGE;
+
+    var language = 'foobar';
+    console.log(process.env);
 
     var tries = [];
 
