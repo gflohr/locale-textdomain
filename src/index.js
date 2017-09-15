@@ -202,9 +202,8 @@ LocaleTextdomain.prototype.setlocale = function(locale) {
             && typeof navigator !== 'undefined'
             && navigator.languages instanceof Array) {
             throw(new Error("Not yet implemented"));
-        // } else if (typeof process !== 'undefined'
-        //           && process.env !== undefined) {
-        } else {
+        } else if (typeof process !== 'undefined'
+                   && process.env !== undefined) {
             locales = setLocaleFromNativeEnvironment();
         }
     } else if (locale !== undefined) {
@@ -253,10 +252,7 @@ LocaleTextdomain.prototype._n = function(msgid, msgid_plural, count) {
  * systems it has to be heavily reworked.
  */
 function setLocaleFromNativeEnvironment() {
-    //var language = process.env.LANGUAGE;
-
-    var language = 'foobar';
-    console.log(process.env);
+    var language = process.env.LANGUAGE;
 
     var tries = [];
 

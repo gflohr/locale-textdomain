@@ -22,6 +22,7 @@ if (env === 'build') {
 const config = {
   entry: __dirname + '/src/index.js',
   devtool: 'source-map',
+  target: 'node',
   output: {
     path: __dirname + '/lib',
     filename: outputFile,
