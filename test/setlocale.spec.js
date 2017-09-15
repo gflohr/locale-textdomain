@@ -39,5 +39,14 @@ describe('When using the native environment', () => {
 
         t.setlocale('').should.equal('de_AT');
     });
+
+    it('it should honor LC_ALL', () => {
+        delete process.env.LANG;
+        process.env.LC_ALL = 'de_DE.UTF-8';
+        delete process.env.LC_MESSAGES;
+        delete process.env.LANGUAGE;
+
+        t.setlocale('').should.equal('de_DE');
+    });
 });
 
