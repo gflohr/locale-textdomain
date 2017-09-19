@@ -3,6 +3,15 @@
 var JDataView = require('jdataview');
 
 function readMO(raw) {
+    try {
+        return doReadMO(raw);
+    }
+    catch(e) {
+        return null;
+    }
+}
+
+function doReadMO(raw) {
     var blob = new JDataView(raw, 0, raw.length, false);
     var magic = blob.getUint32();
 
