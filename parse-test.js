@@ -2,18 +2,8 @@
 
 var parseMO = require('./src/parse-mo.js');
 var fs = require('fs');
-
-fs.readFile('ru.gmo', function(err, content) {
-    if (err) {
-        return console.log(err);
-    }
-
-    parseMO(content, function(err, data) {
-        if (err) {
-            return console.log(err);
-        }
-
-        console.log("Successfully read ru.gmo:");
-        console.log(data);
-    })
-});
+var filename = 'ru.gmo';
+filename = '/opt/local/share/locale/nl/LC_MESSAGES/wget.mo';
+var content = fs.readFileSync(filename, null);
+var data = parseMO(content);
+console.log(data);
