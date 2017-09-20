@@ -82,11 +82,9 @@ function testPlural(code, nplural, expect) {
     var plural = pluralExp(code);
 
     for (var n = 0; n < expect.length; ++n) {
-        for (var n = 0; n < expect.length; ++n) {
-           var retval = plural(n);
-           retval[0].should.equal(nplural);
-           retval[1].should.equal(expect[n]);
-        }
+        var retval = plural(n);
+        retval[0].should.equal(nplural);
+        retval[1].should.equal(expect[n]);
     }
 }
 
