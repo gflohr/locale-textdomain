@@ -39,7 +39,7 @@ describe('When specifying an invalid plural function', () => {
 });
 
 describe('When testing plural functions for individual languages', () => {
-   it('no plural (Japanese, Vietnames, Korean, ...)', () => {
+   it('no plural (Japanese, Vietnamese, Korean, ...)', () => {
        testPlural('nplurals=1; plural=0', 1,
                   [
                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -53,7 +53,7 @@ describe('When testing plural functions for individual languages', () => {
                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1
                   ]);
    });
-   it('Brazilian Portuguese and French', () => {
+   it('Portuguese and French', () => {
        testPlural('nplurals=2; plural=(n > 1)', 2,
                   [
                    0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
