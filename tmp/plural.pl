@@ -3,7 +3,7 @@
 use strict;
 
 my $function = <<EOF;
-nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);
+nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);
 EOF
 
 $function =~ s/(nplurals|plural|n)/\$$1/g;
