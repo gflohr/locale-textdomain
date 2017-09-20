@@ -6,3 +6,7 @@ Gettext-Runtime for JavaScript
 * `npm run dev` - produces development version of your library and runs a watcher
 * `npm run test` - well ... it runs the tests :)
 * `npm run test:watch` - same as above but in a watch mode
+
+# Status
+
+incomplete, pre-alpha
