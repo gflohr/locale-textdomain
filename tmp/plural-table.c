@@ -23,7 +23,7 @@
 #include "plural-table.h"
 
 /* Formulas taken from the documentation, node "Plural forms".  */
-struct plural_table_entry plural_table[] =
+struct plural_table_entry plural_table[] = 
   {
     { "ja", "Japanese",          "nplurals=1; plural=0;" },
     { "vi", "Vietnamese",        "nplurals=1; plural=0;" },
