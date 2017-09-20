@@ -148,6 +148,14 @@ describe('When testing plural functions for individual languages', () => {
                    2, 0, 1, 1, 1, 2, 2, 2, 2, 2
                   ]);
    });
+    it('Czech and Slovak', () => {
+        testPlural('nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;',
+                  3,
+                  [
+                   2, 0, 1, 1, 1, 2, 2, 2, 2, 2,
+                   2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+                  ]);
+   });
 });
 
 function testPlural(code, nplural, expect) {
