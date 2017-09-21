@@ -1,6 +1,6 @@
 'use strict';
 
-var reader = require('../src/read-location');
+var reader = require('../src/binary-reader');
 var chai = require('chai');
 
 chai.should();
@@ -12,7 +12,7 @@ describe('When reading a file at an existing location', () => {
     var d;
 
     beforeEach(function(done) {
-        reader("test/read-location.spec.js", function(err, data) {
+        reader(__filename, function(err, data) {
             e = err;
             d = data;
             done();            

@@ -194,6 +194,8 @@ function LocaleTextdomain(domain) {
 
 LocaleTextdomain.prototype.setlocale = function(locale) {
     if (locale === '') {
+        delete this._catalog;
+
         /* The "native" environment.  Server-side we emulate the
          * mechanism from glibc, in the browser we read the language
          * preferences instead.
@@ -207,6 +209,8 @@ LocaleTextdomain.prototype.setlocale = function(locale) {
             locales = setLocaleFromNativeEnvironment();
         }
     } else if (locale !== undefined) {
+        delete this._catalog;
+
         locales = [locale];
     }
 
@@ -216,7 +220,10 @@ LocaleTextdomain.prototype.setlocale = function(locale) {
 };
 
 LocaleTextdomain.prototype.textdomain = function (domain) {
-    if (!empty(domain)) this._textdomain = domain;
+    if (!empty(domain)) {
+        delete this._catalog;
+        this._textdomain = domain;
+    }
 
     return this._textdomain;
 };
@@ -226,6 +233,7 @@ LocaleTextdomain.prototype.bindtextdomain = function(domain, dir) {
         throw(new Error('undefined or empty textdomain in call to bindtextdomain()'));
 
     if (!empty(dir)) {
+        delete this._catalog;
         domain_bindings[domain] = dir;
     }
 
@@ -235,8 +243,31 @@ LocaleTextdomain.prototype.bindtextdomain = function(domain, dir) {
     return default_dir;
 };
 
+LocaleTextdomain.prototype.loadtextdomain = function(exactMatch, category, callback) {
+    callback = maybeCallback(callback || category || exactMatch);
+
+    if (typeof exactMatch === 'undefined' || exactMatch === callback
+        || category === callback)
+        category = 'LC_MESSAGES';
+
+    if (typeof exactMatch === 'undefined' || exactMatch === callback)
+        exactMatch = false;
+
+    delete this._catalog;
+    for (var i = 0; i < locales.length; ++i) {
+        loadDomainForLanguage.call(this, locales[i], exactMatch, category,
+            function(catalog) {
+                if (catalog !== undefined) {
+                    this._catalog = catalog;
+                    callback(catalog);
+                }
+            }
+        );
+    }
+};
+
 LocaleTextdomain.prototype._ = function(msgid) {
-    return msgid;
+    return this._np(undefined, msgid, undefined, undefined, undefined);
 };
 
 LocaleTextdomain.prototype._n = function(msgid, msgid_plural, count) {
@@ -245,6 +276,60 @@ LocaleTextdomain.prototype._n = function(msgid, msgid_plural, count) {
 
     return msgid_plural;
 };
+
+LocaleTextdomain.prototype._np = function(msgctxt, msgid, msgid_plural, n) {
+    if (msgid === undefined)
+        return;
+
+    var plural = typeof msgid_plural !== 'undefined';
+
+    return msgid;
+};
+
+/* Private methods and helper functions.  */
+function maybeCallback(cb) {
+    return typeof cb === 'function' ? cb : rethrow();
+}
+
+function loadDomain(category) {
+}
+
+function loadDomainForLanguage(locale, exactMatch, category, callback) {
+    var ids = exactMatch ? [locale] : explodeLocale(locale);
+
+    var bound_dir = this.bindtextdomain(this._textdomain);
+    for (var i = 0; i < ids.length; ++i) {
+        var dir = bound_dir + '/' + ids[i] + '/LC_MESSAGES/'
+            + this._textdomain + '.mo';
+    }
+}
+
+/* Transform a locale identifier into a list of ids to check.  For example,
+ * "de_DE@koelsch.UTF-8" would be expanded into "de_DE@koelsch.UTF-8",
+ * "de_DE@koelsch", "de_DE", and "de".
+ */
+function explodeLocale(locale) {
+    var ids = [locale],
+        id = locale;
+    id = locale.replace(/\..*/, '');
+    if (id !== locale) {
+        ids.push(id);
+    }
+
+    locale = id;
+    id = locale.replace(/@.*/, '');
+    if (id !== locale) {
+        ids.push(id);
+    }
+
+    locale = id;
+    id = locale.replace(/[-_].*/, '');
+    if (id !== locale) {
+        ids.push(id);
+    }
+
+    return ids;
+}
 
 /*
  * Set the "locale" according to the native environment.  This will work
