@@ -3,6 +3,8 @@
 const default_dir = 'assets';
 var domain_bindings = {};
 var locales = [];
+var binaryReader = require('./binary-reader');
+var moParser = require('./parse-mo');
 
 // Taken from https://github.com/gflohr/libintl-perl/blob/v1/lib/Locale/Util.pm
 //
@@ -254,16 +256,25 @@ LocaleTextdomain.prototype.loadtextdomain = function(exactMatch, category, callb
         exactMatch = false;
 
     delete this._catalog;
-    for (var i = 0; i < locales.length; ++i) {
-        loadDomainForLanguage.call(this, locales[i], exactMatch, category,
-            function(catalog) {
-                if (catalog !== undefined) {
-                    this._catalog = catalog;
-                    callback(catalog);
-                }
-            }
-        );
+    if (locales.length == 0) {
+        if (callback)
+            setTimeout(callback, 0);
+        return;
     }
+
+    if (!callback)
+        callback = function() {};
+
+    var local_locales = locales.slice();
+    var t = this;
+    loadDomain.call(this, local_locales, exactMatch, category,
+        function(catalog) {
+            if (catalog !== undefined) {
+                t._catalog = catalog;
+                callback(catalog);
+            }
+        }
+    );
 };
 
 LocaleTextdomain.prototype._ = function(msgid) {
@@ -291,16 +302,69 @@ function maybeCallback(cb) {
     return typeof cb === 'function' ? cb : rethrow();
 }
 
-function loadDomain(category) {
-}
+function loadDomain(locales, exactMatch, category, callback) {
+    var t = this;
+    
+    if (locales.length === 0) {
+        setTimeout(callback, 0);
+        return;
+    }
 
-function loadDomainForLanguage(locale, exactMatch, category, callback) {
-    var ids = exactMatch ? [locale] : explodeLocale(locale);
+    var locale = locales.shift(),
+        ids = exactMatch ? [locale] : explodeLocale(locale),
+        domainsById = {},
+        done = 0,
+        success = false,
+        catalog = {
+            nplurals: 1,
+            plural_func: function() { return 0 },
+            messages: {}
+        };
 
     var bound_dir = this.bindtextdomain(this._textdomain);
+    var domain = {};
     for (var i = 0; i < ids.length; ++i) {
-        var dir = bound_dir + '/' + ids[i] + '/LC_MESSAGES/'
+        var filename = bound_dir + '/' + ids[i] + '/' + category + '/'
             + this._textdomain + '.mo';
+        
+        binaryReader(filename, function(err, data) {
+            ++done;
+
+            if (err) {
+                domainsById[ids[i]] = null;
+            } else {
+                success = true;
+                domainsById[ids[i]] = data;
+            }
+
+            if (done === ids.length) {
+                if (!success) {
+                    return loadDomain.call(t, locales, exactMatch, 
+                                           category, callback)
+                }
+
+                for (var j = ids.length - 1; j >= 0; --j) {                    
+                    if (domainsById[ids[j]] === null)
+                        continue;
+                        
+                    domainsById[ids[j]] = moParser(domainsById[ids[j]]);
+                    var partial = domainsById[ids[j]];
+                    if (partial === null)
+                        continue;
+
+                    catalog.nplurals = partial.nplurals;
+                    catalog.plural_func = partial.plural_func;
+
+                    var keys = partial.messages.keys;
+                    for (var k = 0; k < keys.length; ++k) {
+                        var key = keys[k];
+                        catalog.messages[key] = partial.messages[key];
+                    }
+                }
+
+                callback(catalog);
+            }
+        });
     }
 }
 
@@ -355,7 +419,7 @@ function setLocaleFromNativeEnvironment() {
             var ll_CC = token.replace(/@.*/, '');
             if (ll_CC !== token)
                 tries.push(ll_CC);
-            var ll = ll_CC.replace(/_.*/);
+            var ll = ll_CC.replace(/_.*/, '');
             if (ll !== ll_CC) tries.push(ll);
         }
     } else if (process.env.LANG !== undefined) {
