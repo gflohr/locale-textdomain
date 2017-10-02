@@ -269,10 +269,8 @@ LocaleTextdomain.prototype.loadtextdomain = function(exactMatch, category, callb
     var t = this;
     loadDomain.call(this, local_locales, exactMatch, category,
         function(catalog) {
-            if (catalog !== undefined) {
-                t._catalog = catalog;
-                callback(catalog);
-            }
+            t._catalog = catalog;
+            callback(catalog);
         }
     );
 };
