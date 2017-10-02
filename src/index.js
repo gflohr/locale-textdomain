@@ -269,6 +269,8 @@ LocaleTextdomain.prototype.loadtextdomain = function(exactMatch, category, callb
     var t = this;
     loadDomain.call(this, local_locales, exactMatch, category,
         function(catalog) {
+            console.log('everything done');
+            console.log(catalog);
             t._catalog = catalog;
             callback(catalog);
         }
@@ -292,6 +294,10 @@ LocaleTextdomain.prototype._np = function(msgctxt, msgid, msgid_plural, n) {
 
     var plural = typeof msgid_plural !== 'undefined';
 
+
+    if (this._catalog && this._catalog.hasOwnProperty(msgid)) {
+        return this._catalog.messages[msgid][0];
+    }
     return msgid;
 };
 
@@ -325,9 +331,12 @@ function loadDomain(locales, exactMatch, category, callback) {
         var filename = bound_dir + '/' + ids[i] + '/' + category + '/'
             + this._textdomain + '.mo';
         
-        binaryReader(filename, function(err, data) {
+        binaryReader(filename, onFileRead.bind(this, i));
+        
+        function onFileRead(i, err, data) {
             ++done;
 
+            console.log('i ' + i);
             if (err) {
                 domainsById[ids[i]] = null;
             } else {
@@ -341,12 +350,14 @@ function loadDomain(locales, exactMatch, category, callback) {
                                            category, callback)
                 }
 
+                console.log('it worked');
                 for (var j = ids.length - 1; j >= 0; --j) {                    
                     if (domainsById[ids[j]] === null)
                         continue;
                         
                     domainsById[ids[j]] = moParser(domainsById[ids[j]]);
                     var partial = domainsById[ids[j]];
+                    console.log(partial);
                     if (partial === null)
                         continue;
 
@@ -359,10 +370,11 @@ function loadDomain(locales, exactMatch, category, callback) {
                         catalog.messages[key] = partial.messages[key];
                     }
                 }
+                console.log(catalog);
 
                 callback(catalog);
             }
-        });
+        }
     }
 }
 
