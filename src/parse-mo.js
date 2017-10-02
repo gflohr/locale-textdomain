@@ -7,6 +7,7 @@ function readMO(raw) {
         return doReadMO(raw);
     }
     catch(e) {
+        console.log(e);
         return null;
     }
 }
@@ -76,8 +77,7 @@ function doReadMO(raw) {
 
             if (poHeader['content-type'] !== undefined) {
                 var enc = poHeader['content-type'].replace(/.*=/, '');
-                if (enc !== poHeader['content-type']
-                    && iconv.encodingExists(enc)) {
+                if (enc !== poHeader['content-type']) {
                     poHeader.charset = encoding = enc;
                 }
             }
