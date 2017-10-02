@@ -27,7 +27,7 @@ function doReadMO(raw) {
     var num_strings = blob.getUint32();
     var msgid_offset = blob.getUint32();
     var msgstr_offset = blob.getUint32();
- 
+
     blob.seek(msgid_offset);
     var orig_tab = [];
     for (var i = 0; i < num_strings; ++i) {
@@ -46,7 +46,7 @@ function doReadMO(raw) {
 
     var domain = {};
     domain.nplurals = 1;
-    domain.pluralFunc = function() { return 0 };
+    domain.pluralFunc = function() { return 0; };
     var messages = {};
     var poHeader = {};
     var encoding;
@@ -88,7 +88,7 @@ function doReadMO(raw) {
 
     domain.messages = messages;
 
-    return domain; 
+    return domain;
 }
 
 module.exports = readMO;

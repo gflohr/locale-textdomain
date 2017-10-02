@@ -269,8 +269,6 @@ LocaleTextdomain.prototype.loadtextdomain = function(exactMatch, category, callb
     var t = this;
     loadDomain.call(this, local_locales, exactMatch, category,
         function(catalog) {
-            console.log('everything done');
-            console.log(catalog);
             t._catalog = catalog;
             callback(catalog);
         }
@@ -294,10 +292,10 @@ LocaleTextdomain.prototype._np = function(msgctxt, msgid, msgid_plural, n) {
 
     var plural = typeof msgid_plural !== 'undefined';
 
-
-    if (this._catalog && this._catalog.hasOwnProperty(msgid)) {
+    if (this._catalog && this._catalog.messages.hasOwnProperty(msgid)) {
         return this._catalog.messages[msgid][0];
     }
+
     return msgid;
 };
 
@@ -308,7 +306,7 @@ function maybeCallback(cb) {
 
 function loadDomain(locales, exactMatch, category, callback) {
     var t = this;
-    
+
     if (locales.length === 0) {
         setTimeout(callback, 0);
         return;
@@ -321,7 +319,7 @@ function loadDomain(locales, exactMatch, category, callback) {
         success = false,
         catalog = {
             nplurals: 1,
-            plural_func: function() { return 0 },
+            plural_func: function() { return 0; },
             messages: {}
         };
 
@@ -330,47 +328,44 @@ function loadDomain(locales, exactMatch, category, callback) {
     for (var i = 0; i < ids.length; ++i) {
         var filename = bound_dir + '/' + ids[i] + '/' + category + '/'
             + this._textdomain + '.mo';
-        
+
         binaryReader(filename, onFileRead.bind(this, i));
-        
-        function onFileRead(i, err, data) {
+
+        function onFileRead(idx, err, data) {
             ++done;
 
-            console.log('i ' + i);
             if (err) {
-                domainsById[ids[i]] = null;
+                domainsById[ids[idx]] = null;
             } else {
                 success = true;
-                domainsById[ids[i]] = data;
+                domainsById[ids[idx]] = data;
             }
 
             if (done === ids.length) {
                 if (!success) {
-                    return loadDomain.call(t, locales, exactMatch, 
-                                           category, callback)
+                    return loadDomain.call(t, locales, exactMatch,
+                                           category, callback);
                 }
 
-                console.log('it worked');
-                for (var j = ids.length - 1; j >= 0; --j) {                    
+                for (var j = ids.length - 1; j >= 0; --j) {
                     if (domainsById[ids[j]] === null)
                         continue;
-                        
+
                     domainsById[ids[j]] = moParser(domainsById[ids[j]]);
                     var partial = domainsById[ids[j]];
-                    console.log(partial);
                     if (partial === null)
                         continue;
 
                     catalog.nplurals = partial.nplurals;
                     catalog.plural_func = partial.plural_func;
 
-                    var keys = partial.messages.keys;
-                    for (var k = 0; k < keys.length; ++k) {
-                        var key = keys[k];
-                        catalog.messages[key] = partial.messages[key];
+                    var messages = partial.messages;
+                    for (var key in messages) {
+                        if (messages.hasOwnProperty(key)) {
+                            catalog.messages[key] = partial.messages[key];
+                        }
                     }
                 }
-                console.log(catalog);
 
                 callback(catalog);
             }
