@@ -5,34 +5,34 @@ var chai = require('chai');
 
 const expect = chai.expect;
 
-describe('When creating an object', () => {
+describe('When creating an object', function () {
     var t = new LT;
-    describe('before binding a textdomain', () => {
-        it("it should be bound to 'assets", () => {
+    describe('before binding a textdomain', function () {
+        it("it should be bound to 'assets", function () {
             expect(t.bindtextdomain('foobar')).to.be.equal('assets');
         });
     });
-    describe("after binding it to 'js/assets'", () => {
-        it('it should use it', () => {
+    describe("after binding it to 'js/assets'", function () {
+        it('it should use it', function () {
             expect(t.bindtextdomain('foobar', 'js/assets')).to.be.equal('js/assets');
         });
-        it('it should remember it', () => {
+        it('it should remember it', function () {
             expect(t.bindtextdomain('foobar')).to.be.equal('js/assets');
         });
         var t2 = new LT;
 
-        it('it should share it with other instances', () => {
+        it('it should share it with other instances', function () {
             expect(t2.bindtextdomain('foobar')).to.be.equal('js/assets');
         });
     });
-    describe('and binding an undefined textdomain', () => {
-        it('it should throw an exception', () => {
+    describe('and binding an undefined textdomain', function () {
+        it('it should throw an exception', function () {
             expect(t.bindtextdomain.bind(t))
                 .to.throw('undefined or empty textdomain in call to bindtextdomain()');
         });
     });
-    describe('and it is empty', () => {
-        it('it should throw an exception', () => {
+    describe('and it is empty', function () {
+        it('it should throw an exception', function () {
             expect(t.bindtextdomain.bind(t, ''))
                 .to.throw('undefined or empty textdomain in call to bindtextdomain()');
         });

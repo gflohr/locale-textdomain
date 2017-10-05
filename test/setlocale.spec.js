@@ -2,20 +2,20 @@
 
 var LT = require('../lib/locale-textdomain');
 
-describe('When requiring the library', () => {
+describe('When requiring the library', function () {
     var t = new LT();
-    it("it should be in the C locale", () => {
+    it("it should be in the C locale", function () {
         t.setlocale().should.equal('C');
     });
-    it('it should allow to override it and return it', () => {
+    it('it should allow to override it and return it', function () {
         t.setlocale('fr-FR').should.equal('fr-FR');
     });
-    it('it should remember it', () => {
+    it('it should remember it', function () {
         t.setlocale().should.equal('fr-FR');
     });
 });
 
-describe('When using the native environment', () => {
+describe('When using the native environment', function () {
     var t = new LT();
     
     // Clean environment.
@@ -26,7 +26,7 @@ describe('When using the native environment', () => {
         }
     }
 
-    it('it should give LANGUAGE highest precedence', () => {
+    it('it should give LANGUAGE highest precedence', function () {
         process.env.LANG = 'fr_FR';
         process.env.LC_ALL = 'de_DE';
         process.env.LC_MESSAGES = 'fr_FR';
@@ -35,7 +35,7 @@ describe('When using the native environment', () => {
         t.setlocale('').should.equal('de_AT');
     });
 
-    it('it should honor LC_ALL', () => {
+    it('it should honor LC_ALL', function () {
         delete process.env.LANG;
         process.env.LC_ALL = 'de_DE.UTF-8';
         delete process.env.LC_MESSAGES;

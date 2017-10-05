@@ -5,9 +5,9 @@ var chai = require('chai');
 
 const expect = chai.expect;
 
-describe('When requesting a missing translation', () => {
+describe('When requesting a missing translation', function () {
     var t = new LT;
-    it("it should return the original string", () => {
+    it("it should return the original string", function () {
         expect(t._('Hello')).to.be.equal('Hello');
     });
 });

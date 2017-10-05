@@ -5,7 +5,7 @@ var chai = require('chai');
 
 var expect = chai.expect;
 
-describe('When reading a file at an existing location', () => {
+describe('When reading a file at an existing location', function () {
     var e;
     var d;
 
@@ -17,18 +17,18 @@ describe('When reading a file at an existing location', () => {
         });
     });
 
-    it('it should not throw an exception', () => {
+    it('it should not throw an exception', function () {
         expect(e).to.be.null;
     });
-    it('it should have defined content', () => {
+    it('it should have defined content', function () {
         expect(d).to.not.be.undefined;
     });
-    it('it should have content with a length', () => {
+    it('it should have content with a length', function () {
         expect(d.length > 0).to.be.true;
     });
 });
 
-describe('When reading a file at a non-existing location', () => {
+describe('When reading a file at a non-existing location', function () {
     var e;
     var d;
 
@@ -40,10 +40,10 @@ describe('When reading a file at a non-existing location', () => {
         });
     });
 
-    it('it should throw an exception', () => {
+    it('it should throw an exception', function () {
         expect(e).not.to.be.null;
     });
-    it('it should not have defined content', () => {
+    it('it should not have defined content', function () {
         expect(d).to.be.undefined;
     });
 });
