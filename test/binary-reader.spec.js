@@ -3,9 +3,7 @@
 var reader = require('../src/binary-reader');
 var chai = require('chai');
 
-chai.should();
-
-const expect = chai.expect;
+var expect = chai.expect;
 
 describe('When reading a file at an existing location', () => {
     var e;

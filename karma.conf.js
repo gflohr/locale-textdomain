@@ -15,7 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'lib/locale-textdomain.js',
+      'lib/tester.js',
       'e2e-test/**/*.spec.js'
     ],
 

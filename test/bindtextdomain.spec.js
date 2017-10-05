@@ -3,8 +3,6 @@
 var LT = require('../lib/locale-textdomain');
 var chai = require('chai');
 
-chai.expect();
-
 const expect = chai.expect;
 
 describe('When creating an object', () => {

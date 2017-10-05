@@ -1,11 +1,6 @@
 'use strict';
 
 var LT = require('../lib/locale-textdomain');
-var chai = require('chai');
-
-chai.should();
-
-const should = chai.should;
 
 describe('When requiring the library', () => {
     var t = new LT();

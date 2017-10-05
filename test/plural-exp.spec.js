@@ -5,8 +5,6 @@ var chai = require('chai');
 
 chai.should();
 
-const should = chai.should;
-
 describe('When specifying an invalid plural function', () => {
     var expect = [
                     1, 0, 1, 1, 1, 1, 1, 1, 1, 1,

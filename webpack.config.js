@@ -10,17 +10,24 @@ const env = require('yargs').argv.env; // use --env with webpack 2
 let libraryName = 'LocaleTextdomain';
 let fileName = 'locale-textdomain';
 
-let plugins = [], outputFile;
+let plugins = [], outputFile, entry;
 
 if (env === 'build') {
   plugins.push(new UglifyJsPlugin({ minimize: true }));
   outputFile = fileName + '.min.js';
+  entry = __dirname + '/src/index.js';
 } else {
   outputFile = fileName + '.js';
+  entry = {
+      'locale-textdomain': __dirname + '/src/index.js',
+      tester: [ __dirname + '/src/tester.js' ]
+  };
+  outputFile = '[name].js';
+  libraryName = 'Tester';
 }
 
 const config = {
-  entry: __dirname + '/src/index.js',
+  entry: entry,
   devtool: 'source-map',
   target: 'node',
   output: {
