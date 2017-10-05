@@ -1,6 +1,7 @@
 'use strict';
 
 var LT = require('../lib/locale-textdomain');
+var browser = 'undefined' !== typeof browserTest;
 
 describe('When requiring the library', function () {
     var t = new LT();
@@ -15,33 +16,39 @@ describe('When requiring the library', function () {
     });
 });
 
-describe('When using the native environment', function () {
-    var t = new LT();
-    
-    // Clean environment.
-    for (var key in process.env) {
-        if (process.env.hasOwnProperty(key)
-            && key.match(/^LC_/)) {
-            delete process.env[key];
+if (browser) {
+    describe('When using the native browser environment', function() {
+
+    });
+} else {
+    describe('When using the native server environment', function () {
+        var t = new LT();
+        
+        // Clean environment.
+        for (var key in process.env) {
+            if (process.env.hasOwnProperty(key)
+                && key.match(/^LC_/)) {
+                delete process.env[key];
+            }
         }
-    }
-
-    it('it should give LANGUAGE highest precedence', function () {
-        process.env.LANG = 'fr_FR';
-        process.env.LC_ALL = 'de_DE';
-        process.env.LC_MESSAGES = 'fr_FR';
-        process.env.LANGUAGE = 'de_AT:de';
-
-        t.setlocale('').should.equal('de_AT');
+    
+        it('it should give LANGUAGE highest precedence', function () {
+            process.env.LANG = 'fr_FR';
+            process.env.LC_ALL = 'de_DE';
+            process.env.LC_MESSAGES = 'fr_FR';
+            process.env.LANGUAGE = 'de_AT:de';
+    
+            t.setlocale('').should.equal('de_AT');
+        });
+    
+        it('it should honor LC_ALL', function () {
+            delete process.env.LANG;
+            process.env.LC_ALL = 'de_DE.UTF-8';
+            delete process.env.LC_MESSAGES;
+            delete process.env.LANGUAGE;
+    
+            t.setlocale('').should.equal('de_DE');
+        });
     });
-
-    it('it should honor LC_ALL', function () {
-        delete process.env.LANG;
-        process.env.LC_ALL = 'de_DE.UTF-8';
-        delete process.env.LC_MESSAGES;
-        delete process.env.LANGUAGE;
-
-        t.setlocale('').should.equal('de_DE');
-    });
-});
+}
 

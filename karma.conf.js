@@ -27,8 +27,7 @@ module.exports = function(config) {
         'test/bindtextdomain.spec.js',
         'test/gettext.spec.js',
         'test/ngettext.spec.js',
-        'test/plural-exp.spec.js',
-        'test/setlocale.spec.js'
+        'test/plural-exp.spec.js'
     ],
 
 

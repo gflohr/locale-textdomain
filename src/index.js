@@ -5,6 +5,7 @@ var domain_bindings = {};
 var locales = [];
 var binaryReader = require('./binary-reader');
 var moParser = require('./parse-mo');
+var BrowserLanguage = require('./browser-language');
 
 // Taken from https://github.com/gflohr/libintl-perl/blob/v1/lib/Locale/Util.pm
 //
@@ -205,7 +206,7 @@ LocaleTextdomain.prototype.setlocale = function(locale) {
         if (typeof window !== 'undefined'
             && typeof navigator !== 'undefined'
             && navigator.languages instanceof Array) {
-            throw(new Error("Not yet implemented"));
+            locales = browserLanguage.get();
         } else if (typeof process !== 'undefined'
                    && process.env !== undefined) {
             locales = setLocaleFromNativeEnvironment();

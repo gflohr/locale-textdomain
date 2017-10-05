@@ -3,5 +3,6 @@
 module.exports = {
     LocaleTextdomain: require('./index.js'),
     binaryReader: require('./binary-reader'),
-    pluralExp: require('./plural-exp')
+    pluralExp: require('./plural-exp'),
+    BrowserLanguage: require('../test/browser-language')
 };

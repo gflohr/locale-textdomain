@@ -5,7 +5,8 @@ function require(path) {
         'chai': chai,
         '../lib/locale-textdomain': Tester.LocaleTextdomain,
         '../src/binary-reader': Tester.binaryReader,
-        '../src/plural-exp': Tester.pluralExp
+        '../src/plural-exp': Tester.pluralExp,
+        '../src/browser-language': Tester.BrowserLanguage
     };
 
     if (!paths.hasOwnProperty(path))
@@ -13,3 +14,5 @@ function require(path) {
 
     return paths[path];
 }
+
+var browserTest = true;
