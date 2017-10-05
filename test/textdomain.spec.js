@@ -3,8 +3,6 @@
 var LT = require('../lib/locale-textdomain');
 var chai = require('chai');
 
-chai.expect();
-
 var expect = chai.expect;
 
 describe('When requiring the library', function () {

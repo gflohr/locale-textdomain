@@ -7,7 +7,7 @@
     "build": "webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
     "pretest": "webpack --env dev",
-    "test": "npm run nodetest; npm run browsertest",
+    "test": "npm run nodetest && npm run browsertest",
     "prenodetest": "webpack --env build",
     "nodetest": "mocha --colors ./test/*.spec.js",
     "nodetest:watch": "mocha --colors -w ./test/*.spec.js",
