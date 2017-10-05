@@ -1,6 +1,6 @@
 'use strict';
 
-var LT = LocaleTextdomain;
+var LT = Tester.LocaleTextdomain;
 
 describe('When requiring the library', function() {
     describe('and no textdomain was specified', function() {
