@@ -1,6 +1,6 @@
 'use strict';
 
-const default_dir = 'assets';
+var default_dir = 'assets';
 var domain_bindings = {};
 var locales = [];
 var binaryReader = require('./binary-reader');
@@ -9,7 +9,7 @@ var moParser = require('./parse-mo');
 // Taken from https://github.com/gflohr/libintl-perl/blob/v1/lib/Locale/Util.pm
 //
 // Map lone language codes to a "default" country.
-const LANG2COUNTRY = {
+var LANG2COUNTRY = {
     aa: 'ET', // Afar => Ethiopia
     ab: 'AB', // Abkhazian => Georgia
     // ae: '??', // Avestan => ??, Iran?
@@ -325,51 +325,52 @@ function loadDomain(locales, exactMatch, category, callback) {
 
     var bound_dir = this.bindtextdomain(this._textdomain);
     var domain = {};
+
+    function onFileRead(idx, err, data) {
+        ++done;
+
+        if (err) {
+            domainsById[ids[idx]] = null;
+        } else {
+            success = true;
+            domainsById[ids[idx]] = data;
+        }
+
+        if (done === ids.length) {
+            if (!success) {
+                return loadDomain.call(t, locales, exactMatch,
+                                       category, callback);
+            }
+
+            for (var j = ids.length - 1; j >= 0; --j) {
+                if (domainsById[ids[j]] === null)
+                    continue;
+
+                domainsById[ids[j]] = moParser(domainsById[ids[j]]);
+                var partial = domainsById[ids[j]];
+                if (partial === null)
+                    continue;
+
+                catalog.nplurals = partial.nplurals;
+                catalog.plural_func = partial.plural_func;
+
+                var messages = partial.messages;
+                for (var key in messages) {
+                    if (messages.hasOwnProperty(key)) {
+                        catalog.messages[key] = partial.messages[key];
+                    }
+                }
+            }
+
+            callback(catalog);
+        }
+    }
+
     for (var i = 0; i < ids.length; ++i) {
         var filename = bound_dir + '/' + ids[i] + '/' + category + '/'
             + this._textdomain + '.mo';
 
         binaryReader(filename, onFileRead.bind(this, i));
-
-        function onFileRead(idx, err, data) {
-            ++done;
-
-            if (err) {
-                domainsById[ids[idx]] = null;
-            } else {
-                success = true;
-                domainsById[ids[idx]] = data;
-            }
-
-            if (done === ids.length) {
-                if (!success) {
-                    return loadDomain.call(t, locales, exactMatch,
-                                           category, callback);
-                }
-
-                for (var j = ids.length - 1; j >= 0; --j) {
-                    if (domainsById[ids[j]] === null)
-                        continue;
-
-                    domainsById[ids[j]] = moParser(domainsById[ids[j]]);
-                    var partial = domainsById[ids[j]];
-                    if (partial === null)
-                        continue;
-
-                    catalog.nplurals = partial.nplurals;
-                    catalog.plural_func = partial.plural_func;
-
-                    var messages = partial.messages;
-                    for (var key in messages) {
-                        if (messages.hasOwnProperty(key)) {
-                            catalog.messages[key] = partial.messages[key];
-                        }
-                    }
-                }
-
-                callback(catalog);
-            }
-        }
     }
 }
 

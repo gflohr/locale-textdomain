@@ -8,13 +8,23 @@
     "dev": "webpack --progress --colors --watch --env dev",
     "pretest": "webpack --env dev",
     "test": "mocha --colors ./test/*.spec.js",
-    "test:watch": "mocha --colors -w ./test/*.spec.js"
+    "test:watch": "mocha --colors -w ./test/*.spec.js",
+    "e2e-test": "karma start karma.conf.js --single-run",
+    "e2e-test:watch": "karma start karma.conf.js",
+    "pree2e-test": "webpack --env dev"
   },
   "devDependencies": {
     "chai": "3.5.0",
     "eslint": "3.19.0",
     "eslint-loader": "1.7.1",
     "jdataview": "^2.5.0",
+    "karma": "^1.7.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-safari-launcher": "^1.0.0",
     "mocha": "3.3.0",
     "webpack": "3.1.0",
     "yargs": "7.1.0"
