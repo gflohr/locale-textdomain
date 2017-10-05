@@ -304,7 +304,7 @@ function maybeCallback(cb) {
     function rethrow() {
         throw new Error(cb + " is not a function");
     }
-    
+
     return typeof cb === 'function' ? cb : rethrow();
 }
 
