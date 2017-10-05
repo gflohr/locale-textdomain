@@ -15,13 +15,20 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'lib/tester.js',
-      'e2e-test/**/*.spec.js'
+        'test/require.js',
+        'lib/tester.js',
+        'test/**/*.spec.js'
     ],
 
 
     // list of files to exclude
     exclude: [
+        'test/binary-reader.spec.js',
+        'test/bindtextdomain.spec.js',
+        'test/gettext.spec.js',
+        'test/ngettext.spec.js',
+        'test/plural-exp.spec.js',
+        'test/setlocale.spec.js'
     ],
 
 

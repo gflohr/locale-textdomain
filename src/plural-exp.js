@@ -23,12 +23,12 @@ function pluralExpression(str) {
 
     try {
         var code = 'var nplurals=1, plural=0;'
-                   + str 
+                   + str
                    + '; return [0 + nplurals, 0 + plural]';
         return new Function('n', code);
     }
     catch(e) {
-        return function() { return germanicPlural };
+        return function() { return germanicPlural; };
     }
 }
 
