@@ -5,7 +5,7 @@ var chai = require('chai');
 
 chai.expect();
 
-const expect = chai.expect;
+var expect = chai.expect;
 
 describe('When requiring the library', function () {
     describe('and no textdomain was specified', function () {

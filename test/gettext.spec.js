@@ -3,7 +3,7 @@
 var LT = require('../lib/locale-textdomain');
 var chai = require('chai');
 
-const expect = chai.expect;
+var expect = chai.expect;
 
 describe('When requesting a missing translation', function () {
     var t = new LT;
