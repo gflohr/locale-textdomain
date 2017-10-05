@@ -301,6 +301,10 @@ LocaleTextdomain.prototype._np = function(msgctxt, msgid, msgid_plural, n) {
 
 /* Private methods and helper functions.  */
 function maybeCallback(cb) {
+    function rethrow() {
+        throw new Error(cb + " is not a function");
+    }
+    
     return typeof cb === 'function' ? cb : rethrow();
 }
 
