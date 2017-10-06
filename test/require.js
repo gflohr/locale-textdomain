@@ -16,3 +16,10 @@ function require(path) {
 }
 
 var browserTest = true;
+
+var navigatorLanguages = [];
+Object.defineProperty(navigator, 'languages', {
+    get: function() {
+        return navigatorLanguages;
+    }
+});

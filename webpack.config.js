@@ -17,7 +17,6 @@ if (env === 'build') {
   outputFile = fileName + '.min.js';
   entry = __dirname + '/src/index.js';
 } else {
-  outputFile = fileName + '.js';
   entry = {
       'locale-textdomain': __dirname + '/src/index.js',
       tester: [ __dirname + '/src/tester.js' ]

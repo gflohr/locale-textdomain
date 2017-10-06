@@ -8,10 +8,10 @@
     "dev": "webpack --progress --colors --watch --env dev",
     "pretest": "webpack --env dev",
     "test": "npm run nodetest && npm run browsertest",
-    "prenodetest": "webpack --env build",
+    "prenodetest": "webpack --env dev",
     "nodetest": "mocha --colors ./test/*.spec.js",
     "nodetest:watch": "mocha --colors -w ./test/*.spec.js",
-    "prebrowsertest": "webpack --env build",
+    "prebrowsertest": "webpack --env dev",
     "browsertest": "karma start karma.conf.js --single-run",
     "browsertest:watch": "karma start karma.conf.js"
   },

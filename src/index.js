@@ -5,7 +5,6 @@ var domain_bindings = {};
 var locales = [];
 var binaryReader = require('./binary-reader');
 var moParser = require('./parse-mo');
-var BrowserLanguage = require('./browser-language');
 
 // Taken from https://github.com/gflohr/libintl-perl/blob/v1/lib/Locale/Util.pm
 //
@@ -193,6 +192,13 @@ function LocaleTextdomain(domain) {
         domain = 'messages';
 
     this._textdomain = domain;
+
+    if (typeof window !== 'undefined'
+            && typeof navigator !== 'undefined') {
+        this._getBrowserLanguages = function() {
+            console.log('real function called');
+        };
+    }
 }
 
 LocaleTextdomain.prototype.setlocale = function(locale) {
@@ -204,9 +210,15 @@ LocaleTextdomain.prototype.setlocale = function(locale) {
          * preferences instead.
          */
         if (typeof window !== 'undefined'
-            && typeof navigator !== 'undefined'
-            && navigator.languages instanceof Array) {
-            locales = browserLanguage.get();
+            && typeof navigator !== 'undefined') {
+            if (navigator.languages) {
+                locales = navigator.languages.slice();
+            } else if (navigator.hasOwnProperty('language')
+                       && navigator.language.length !== 0) {
+                locales = [navigator.language];
+            } else {
+                locales = [];
+            }
         } else if (typeof process !== 'undefined'
                    && process.env !== undefined) {
             locales = setLocaleFromNativeEnvironment();
