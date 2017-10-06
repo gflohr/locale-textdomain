@@ -192,14 +192,30 @@ function LocaleTextdomain(domain) {
         domain = 'messages';
 
     this._textdomain = domain;
-
-    if (typeof window !== 'undefined'
-            && typeof navigator !== 'undefined') {
-        this._getBrowserLanguages = function() {
-            console.log('real function called');
-        };
-    }
 }
+
+function isBrowser() {
+    return typeof window !== 'undefined' && typeof navigator !== 'undefined';
+}
+
+LocaleTextdomain.prototype.getlocales = function() {
+    var rawLocales;
+
+    if (isBrowser()) {
+        if (navigator.languages) {
+            rawLocales = navigator.languages.slice();
+        } else if (navigator.hasOwnProperty('language')
+                   && navigator.language.length !== 0) {
+            rawLocales = [navigator.language];
+        } else {
+            rawLocales = [];
+        }
+    } else {
+        rawLocales = getLocalesFromEnvironment();
+    }
+
+    return rawLocales;
+};
 
 LocaleTextdomain.prototype.setlocale = function(locale) {
     if (locale === '') {
@@ -418,11 +434,6 @@ function explodeLocale(locale) {
     return ids;
 }
 
-/*
- * Set the "locale" according to the native environment.  This will work
- * on Linux and to a certain extent on *BSD systems and Mac OS X.  For other
- * systems it has to be heavily reworked.
- */
 function setLocaleFromNativeEnvironment() {
     var language = process.env.LANGUAGE;
 
@@ -468,6 +479,45 @@ function setLocaleFromNativeEnvironment() {
     }
 
     return tries;
+}
+
+function getLocalesFromEnvironment() {
+    var language = process.env.LANGUAGE;
+
+    var entries = [];
+
+    if (language !== undefined) {
+        var tokens = language.split(':');
+        for (var i = 0; i < tokens.length; ++i) {
+            // Strip off a possible character set.
+            var token = tokens[i].replace(/\..*/, '');
+
+            if (tokens[i] === '') continue;
+
+            if (LANG2COUNTRY[token] !== undefined) {
+                entries.push(token);
+                token = token + '_' + LANG2COUNTRY[token];
+            }
+
+            entries.push(token);
+        }
+    } else if (process.env.LANG !== undefined) {
+        var lang = process.env.LANG;
+        lang = lang.replace(/\..*/);
+        entries.push[lang];
+    } else {
+        var variables = ['LC_ALL', 'LC_MESSAGES', 'LANG'];
+        for (var i = 0; i < variables.length; ++i) {
+            var value = process.env[variables[i]];
+            if (value !== undefined) {
+                value = value.replace(/\..*/, '');
+                entries.push(value);
+                break;
+            }
+        }
+    }
+
+    return entries;
 }
 
 module.exports = function (domain) {
