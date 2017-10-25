@@ -6,12 +6,12 @@
   "scripts": {
     "build": "webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
-    "pretest": "webpack --env dev",
+    "pretest": "npm install; webpack --env dev",
     "test": "npm run nodetest && npm run browsertest",
-    "prenodetest": "webpack --env dev",
+    "prenodetest": "npm install; webpack --env dev",
     "nodetest": "mocha --colors ./test/*.spec.js",
     "nodetest:watch": "mocha --colors -w ./test/*.spec.js",
-    "prebrowsertest": "webpack --env dev",
+    "prebrowsertest": "npm install; webpack --env dev",
     "browsertest": "karma start karma.conf.js --single-run",
     "browsertest:watch": "karma start karma.conf.js"
   },
