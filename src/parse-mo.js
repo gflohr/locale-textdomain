@@ -22,8 +22,11 @@ function doReadMO(raw) {
         return null; // Data corrupted.
 
     blob.skip(4);
-    var revision = blob.getUint32();
-    if (revision > 1) return null;  // Unsupported.
+
+    // The revision is encoded in two shorts, major and minor.  We don't care
+    // about the minor revision.
+    var major = blob.getUint32() >> 16;
+    if (major > 1) return null;  // Unsupported.
     var num_strings = blob.getUint32();
     var msgid_offset = blob.getUint32();
     var msgstr_offset = blob.getUint32();
