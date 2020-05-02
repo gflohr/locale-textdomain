@@ -9,4 +9,4 @@ Gettext-Runtime for JavaScript
 
 # Status
 
-incomplete, pre-alpha
+Defunct. Replaced by [esgettext](https://github.com/gflohr/esgettext).
