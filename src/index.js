@@ -198,8 +198,13 @@ function isBrowser() {
     return typeof window !== 'undefined' && typeof navigator !== 'undefined';
 }
 
-LocaleTextdomain.prototype.getlocales = function() {
-    var rawLocales;
+LocaleTextdomain.prototype.getlocales = function(explode, httpFormat) {
+    var rawLocales,
+        filteredLocales = [], seen = {};
+
+    if (httpFormat === undefined || httpFormat === null) {
+        httpFormat = isBrowser();
+    }
 
     if (isBrowser()) {
         if (navigator.languages) {
@@ -214,7 +219,27 @@ LocaleTextdomain.prototype.getlocales = function() {
         rawLocales = getLocalesFromEnvironment();
     }
 
-    return rawLocales;
+    for (var i = 0; i < rawLocales.length; ++i) {
+        if (httpFormat) {
+            rawLocales[i] = rawLocales[i].replace(/_/g, '-').toLowerCase();
+        } else {
+            rawLocales[i] = rawLocales[i].replace(/^([a-zA-Z]{2})([-_]([a-zA-Z]{2}))?/,
+                function(m, p1, p2, p3) {
+                    var replace = p1.toLowerCase();
+                    if (p2) replace += '_' + p3.toUpperCase();
+
+                    return replace;
+                }
+            );
+        }
+
+        if (!seen.hasOwnProperty(rawLocales[i])) {
+            seen[rawLocales[i]] = true;
+            filteredLocales.push(rawLocales[i]);
+        }
+    }
+
+    return filteredLocales;
 };
 
 LocaleTextdomain.prototype.setlocale = function(locale) {

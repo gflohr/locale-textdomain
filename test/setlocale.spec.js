@@ -20,7 +20,7 @@ describe('When requiring the library', function () {
 if (browser) {
     describe('When using the native browser environment', function() {
         var t = new LT();
-        navigatorLanguages = ['de_AT', 'de', 'fr'];
+        setNativeEnvironment(['de_AT', 'de', 'fr']);
         it("It should use the browser language", function() {
             t.setlocale('').should.equal('de_AT');
         });

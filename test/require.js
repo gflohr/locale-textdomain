@@ -18,8 +18,24 @@ function require(path) {
 var browserTest = true;
 
 var navigatorLanguages = [];
+
 Object.defineProperty(navigator, 'languages', {
     get: function() {
         return navigatorLanguages;
     }
 });
+
+function setNativeEnvironment(l) {
+    if (browser) {
+        navigatorLanguages = l.slice();
+    } else {
+        for (var key in process.env) {
+            if (process.env.hasOwnProperty(key)
+                && key.match(/^LC_/)) {
+                delete process.env[key];
+            }
+        }
+        delete process.env.LANG;
+        process.env.LANGUAGE = l.join(':');
+    }
+}
